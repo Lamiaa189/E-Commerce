@@ -1,0 +1,144 @@
+<section class="auth-section">
+  <form [formGroup]="registerForm" (ngSubmit)="submitForm()" class="auth-form">
+    <div class="text-center mb-8">
+      <h1 class="auth-title">Create your account</h1>
+      <p class="mt-2 text-sm text-gray-500">Join us to start shopping smarter.</p>
+    </div>
+
+    <div class="mb-6">
+      <app-input
+        [control]="registerForm.get('name')"
+        inputType="text"
+        inputId="name"
+        inputLabel="Name"
+      ></app-input>
+    </div>
+
+    <div class="mb-6">
+      <app-input
+        [control]="registerForm.get('email')"
+        inputType="email"
+        inputId="email"
+        inputLabel="Email"
+      ></app-input>
+    </div>
+
+    <div class="mb-6">
+      <div class="relative">
+        @let passwordControl=registerForm.get('password');
+        <input
+          [class]="{ 'border-red-700': passwordControl?.invalid && passwordControl?.touched }"
+          formControlName="password"
+          [type]="showPassword() ? 'text' : 'password'"
+          id="password"
+          class="main-input peer"
+          placeholder=" "
+        />
+        <label
+          [class]="{ 'text-red-700': passwordControl?.invalid && passwordControl?.touched }"
+          for="password"
+          class="main-label"
+          >Password</label
+        >
+        <span
+          (click)="showPassword.set(!showPassword())"
+          class="absolute top-1/2 -translate-y-1/2 end-4 cursor-pointer"
+        >
+          @if(showPassword()){
+          <i class="fa-solid fa-eye-slash"></i>
+          } @else {
+          <i class="fa-solid fa-eye"></i>
+          }
+        </span>
+      </div>
+      @if(passwordControl?.errors && passwordControl?.touched) {
+      <div>
+        @if(passwordControl?.getError('required')) {
+        <p class="invalid-alert">This field is required.</p>
+        } @else if (passwordControl?.getError('pattern')) {
+        <p class="invalid-alert">Password must be at least 6 characters.</p>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="mb-6">
+      <div class="relative">
+        @let rePasswordControl=registerForm.get('rePassword');
+        <input
+          [class]="{ 'border-red-700': rePasswordControl?.invalid && rePasswordControl?.touched }"
+          formControlName="rePassword"
+          [type]="showRePassword() ? 'text' : 'password'"
+          id="rePassword"
+          class="main-input peer"
+          placeholder=" "
+        />
+        <label
+          [class]="{ 'text-red-700': rePasswordControl?.invalid && rePasswordControl?.touched }"
+          for="rePassword"
+          class="main-label"
+          >Confirm Password</label
+        >
+        <span
+          (click)="showRePassword.set(!showRePassword())"
+          class="absolute top-1/2 -translate-y-1/2 end-4 cursor-pointer"
+        >
+          @if(showRePassword()){
+          <i class="fa-solid fa-eye-slash"></i>
+          } @else {
+          <i class="fa-solid fa-eye"></i>
+          }
+        </span>
+      </div>
+      @if(rePasswordControl?.touched) {
+      <div>
+        @if(rePasswordControl?.errors && rePasswordControl?.getError('required')) {
+        <p class="invalid-alert">This field is required.</p>
+        } @else if (registerForm.getError('mismatch')) {
+        <p class="invalid-alert">Both passwords must be the same.</p>
+        }
+      </div>
+      }
+    </div>
+
+    <div>
+      <div class="relative">
+        @let phoneControl=registerForm.get('phone');
+        <input
+          [class]="{ 'border-red-700': phoneControl?.invalid && phoneControl?.touched }"
+          formControlName="phone"
+          type="tel"
+          id="phone"
+          class="main-input peer"
+          placeholder=" "
+        />
+        <label
+          [class]="{ 'text-red-700': phoneControl?.invalid && phoneControl?.touched }"
+          for="phone"
+          class="main-label"
+          >Phone</label
+        >
+      </div>
+      @if(phoneControl?.errors && phoneControl?.touched) {
+      <div>
+        @if(phoneControl?.getError('required')) {
+        <p class="invalid-alert">This field is required.</p>
+        } @else if (phoneControl?.getError('pattern')) {
+        <p class="invalid-alert">Accept only egypt phone numbers.</p>
+        }
+      </div>
+      }
+    </div>
+
+    <button [disabled]="registerForm.invalid || isLoading()" type="submit" class="btn my-8">
+      @if(isLoading()) {
+      <i class="fa-solid fa-spinner animate-spin"></i>
+      } Create account
+    </button>
+
+    <p class="text-center text-sm text-gray-600">
+      Already have an account?
+      <a routerLink="/login" class="auth-link">Sign in</a>
+    </p>
+  </form>
+</section>
